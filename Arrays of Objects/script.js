@@ -57,23 +57,23 @@ const addStudent = (id, name, grade) => {
   students.push(newStudent);
 };
 addStudent(3, "James", "C");
-console.log(students);
+// console.log(students);
 
 // Upgrade student
 
-const updateStudentsGrade = (id, newGrade) => {
-  const studentFounnd = students.find((student) => {
-    return student.id === id;
-  });
+// const updateStudentsGrade = (id, newGrade) => {
+//   const studentFounnd = students.find((student) => {
+//     return student.id === id;
+//   });
 
-  if (studentFounnd) {
-    studentFounnd.grade = newGrade;
-  } else {
-    console.log("Student not found");
-  }
-};
+//   if (studentFounnd) {
+//     studentFounnd.grade = newGrade;
+//   } else {
+//     console.log("Student not found");
+//   }
+// };
 
-updateStudentsGrade(3, "D");
+// updateStudentsGrade(3, "D");
 
 // *-------
 // * Array in Objects
@@ -83,9 +83,53 @@ updateStudentsGrade(3, "D");
 
 //We'll create a simple ToDoList object that has a tasks array property. Each object inside the task array will have properties like 'id' 'description' and copmleted
 
-const todoList ={
-  tittl:"Todo List Application"
-  tasks:[
-    [{id:, description:"BUY Groceries", completed:false}]
-  ]
-}
+const todoList = {
+  title: "Todo List Application",
+  tasks: [
+    { id: 1, description: "Buy Groceries", completed: false },
+    { id: 2, description: "Go to Gym", completed: true },
+    { id: 3, description: "Call Mom", completed: false },
+  ],
+};
+
+// Accessing properties
+
+const todoTile = todoList.title;
+
+// tasks
+const allTasks = todoList.tasks[0];
+// console.log(allTasks);
+
+// Function to add a task
+const addTask = (description) => {
+  // get new id
+
+  const newId = todoList.tasks.length + 1;
+  const newTask = {
+    id: newId,
+    description,
+    completed: false,
+  };
+
+  // push the new task into  the original task
+
+  todoList.tasks.push(newTask);
+};
+
+addTask("Programming");
+// console.log(todoList);
+
+// Function to mark a task as completed
+
+// const markAsCompleted = (id) => {
+// find task
+
+//   const foundTask = todoList.tasks.find((task) => task.id === id);
+//   if (foundTask) {
+//     foundTask.completed = true;
+//   } else {
+//     console.log("task Not Found");
+//   }
+// };
+// markAsCompleted(2);
+// console.log(todoList);
