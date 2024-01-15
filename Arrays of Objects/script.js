@@ -175,7 +175,7 @@ let productNames = [];
 cart.forEach((item) => {
   productNames.push(item.name);
 });
-console.log(productNames);
+// console.log(productNames);
 
 // Calculate the Total Number of Items
 
@@ -184,4 +184,35 @@ cart.forEach((item) => {
   totalItems += item.qty;
 });
 
-console.log(totalItems);
+// console.log(totalItems);
+
+// *-------
+// * Iterate through arrays using 'map()'
+// *-------
+
+// Suppose we have an array of products in a shopping cart. Each object represents a product with a price. We want to apply a 10% discount to all products
+
+// Initial Data
+
+const shoppingCart = [
+  { name: "Laptop", price: 1000, qty: 1 },
+  { name: "Phone", price: 500, qty: 2 },
+  { name: "Tv", price: 1500, qty: 1 },
+  { name: "Headphones", price: 100, qty: 3 },
+];
+
+// Add 10% discount
+const discountedCart = shoppingCart.map((product) => {
+  return {
+    name: product.name,
+    price: product.price * 0.9,
+  };
+});
+// get all the product name only
+
+const productNamesOnly = shoppingCart.map((product) => {
+  return {
+    name: product.name,
+  };
+});
+console.log(productNamesOnly);
