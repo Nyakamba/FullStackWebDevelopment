@@ -133,3 +133,55 @@ addTask("Programming");
 // };
 // markAsCompleted(2);
 // console.log(todoList);
+
+// *-------
+// * Iterate through arrays using 'forEch'
+// *-------
+
+// Basic Example
+
+const fruits = [
+  { name: "Banana", color: "Yellow" },
+  { name: "Apple", color: "Red" },
+  { name: "Cherry", color: "red" },
+];
+
+// fruits.forEach((current, index, array) => {
+//   console.log(current, index, array);
+// });
+
+// Case study: Oonline Shooping cart Calculation
+//  Suppose you  are working on an e-commerce website/ and now you need to calculate the total price of items in a user's shopping cart.Each item in the cart is represented as an object in an array with properties such 'name', 'price', and 'quantity'. Your task is to calculate the total cost of items ion the cart and also list the names of all items in the cart for the user's review
+
+// Initial data
+const cart = [
+  { name: "Laptop", price: 1000, qty: 1 },
+  { name: "Phone", price: 500, qty: 2 },
+  { name: "Tv", price: 1500, qty: 1 },
+  { name: "Headphones", price: 100, qty: 3 },
+];
+// Calculate the total cost of the items in the cart
+
+let toatlCost = 0;
+cart.forEach((item) => {
+  // sum all the prodcut prices
+  toatlCost += item.price * item.qty;
+});
+
+// List all ther names of the products
+
+let productNames = [];
+
+cart.forEach((item) => {
+  productNames.push(item.name);
+});
+console.log(productNames);
+
+// Calculate the Total Number of Items
+
+let totalItems = 0;
+cart.forEach((item) => {
+  totalItems += item.qty;
+});
+
+console.log(totalItems);
