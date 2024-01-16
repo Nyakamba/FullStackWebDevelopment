@@ -317,4 +317,23 @@ if (indexToMove !== -1) {
 const newSong = { id: "s5", title: "Song-5", artist: "Artist-E" };
 
 playlist.splice(4, 0, newSong);
-console.log(playlist);
+
+// *-------
+// * Transformation and manipulation using 'Object.assign()'
+// *-------
+
+// Updating properties of student ina class
+const studentArr = [
+  { id: 1, name: "Alice", grade: "A" },
+  { id: 2, name: "Bob", grade: "B" },
+];
+
+// Grade updates
+const gradeUpdates = [{ grade: "A+" }, { grade: "E" }];
+
+// update the students
+
+const updatedStudents = studentArr.map((student, index) => {
+  return Object.assign({}, student, gradeUpdates[index]);
+});
+console.log(updatedStudents);
