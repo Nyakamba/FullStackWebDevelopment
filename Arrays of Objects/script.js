@@ -246,4 +246,75 @@ const largeTransactions = transactions.filter(
   (transaction) => transaction.amount > 100
 );
 
-console.log(largeTransactions);
+// console.log(largeTransactions);
+
+// *-------
+// * Iterate through arrays using 'splice()'
+// *-------
+
+// Remove inactive users
+
+const usersArr = [
+  { id: 1, isActive: false, name: "Bob" },
+  { id: 2, isActive: true, name: "Emma" },
+  { id: 3, isActive: true, name: "Alice" },
+];
+
+// Remove inactive user
+// FInd the index of the user to be removed
+
+const indexToRemove = usersArr.findIndex(
+  (user) => user.id === 1 && !user.isActive
+);
+
+//console.log(indexToRemove);
+
+// use  splice
+
+if (indexToRemove !== -1) {
+  usersArr.splice(indexToRemove, 1);
+}
+
+// console.log(usersArr);
+
+// Managing playlist
+
+// Music streaming app, add, remove songs,
+
+// Solution
+
+const playlist = [
+  { id: "s1", title: "Song-1", artist: "Artist-A" },
+  { id: "s2", title: "Song-2", artist: "Artist-B" },
+  { id: "s3", title: "Song-3", artist: "Artist-C" },
+  { id: "s4", title: "Song-4", artist: "Artist-D" },
+];
+
+// Remove song of id s1
+
+const songIndexToRemove = playlist.findIndex((song) => song.id === "s1");
+//console.log(songIndexToRemove);
+
+// Remove the song using splice
+
+// if (songIndexToRemove !== -1) {
+//   playlist.splice(songIndexToRemove, 1);
+// }
+// console.log(playlist);
+
+// Move a song od id s1 to third position
+
+const indexToMove = playlist.findIndex((song) => song.id === "s1");
+
+if (indexToMove !== -1) {
+  const [songToMove] = playlist.splice(indexToMove, 1);
+
+  playlist.splice(2, 0, songToMove);
+}
+
+// Insert new song
+
+const newSong = { id: "s5", title: "Song-5", artist: "Artist-E" };
+
+playlist.splice(4, 0, newSong);
+console.log(playlist);
