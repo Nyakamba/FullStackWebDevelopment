@@ -368,5 +368,19 @@ const patients2 = [
 //Patient with cold
 
 const patientWithCold2 = patients.some((patient) => patient.disease === "Cold");
+//console.log(patientWithCold2)
 
-console.log(patientWithCold2);
+// *-------
+// * Search and filter using 'every()'
+// *-------
+
+//Confirm if all students passed the exams
+
+const students2 = [
+  { id: 1, name: "Bob", grade: "A" },
+  { id: 2, name: "Alice", grade: "B" },
+  { id: 3, name: "Enock", grade: "A" },
+];
+
+const allPassed = students2.every((student) => student.grade !== "F");
+console.log(allPassed);
