@@ -135,7 +135,7 @@ addTask("Programming");
 // console.log(todoList);
 
 // *-------
-// * Iterate through arrays using 'forEch'
+// * Iterate through arrays using 'forEach'
 // *-------
 
 // Basic Example
@@ -215,4 +215,35 @@ const productNamesOnly = shoppingCart.map((product) => {
     name: product.name,
   };
 });
-console.log(productNamesOnly);
+// console.log(productNamesOnly);
+
+// *-------
+// * Iterate through arrays using 'filter()'
+// *-------
+
+// Filtering Active users
+
+const users = [
+  { id: 1, isActive: false, name: "Bob" },
+  { id: 2, isActive: true, name: "Emma" },
+  ,
+  { id: 3, isActive: false, name: "Alice" },
+];
+//  filter out active users
+
+const activeUsers = users.filter((user) => user.isActive === true);
+// console.log(activeUsers);
+
+const transactions = [
+  { id: 1, amount: 50 },
+  { id: 2, amount: 150 },
+  { id: 3, amount: 200 },
+];
+
+// filter out all amount above 100
+
+const largeTransactions = transactions.filter(
+  (transaction) => transaction.amount > 100
+);
+
+console.log(largeTransactions);
