@@ -336,4 +336,21 @@ const gradeUpdates = [{ grade: "A+" }, { grade: "E" }];
 const updatedStudents = studentArr.map((student, index) => {
   return Object.assign({}, student, gradeUpdates[index]);
 });
-console.log(updatedStudents);
+// console.log(updatedStudents);
+
+// *-------
+// * Search and filter using 'find()'
+// *-------
+
+// Find the first patient with a specific Ailment
+
+const patients = [
+  { id: 101, name: "Sarah", disease: "Cold" },
+  { id: 102, name: "Mike", disease: "Fever" },
+  { id: 103, name: "Lucy", disease: "Cold" },
+];
+
+//Patient with cold
+
+const patientWithCold = patients.find((patient) => patient.disease === "Cold");
+console.log(patientWithCold);
