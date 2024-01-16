@@ -16,4 +16,4 @@ console.log(innerWidth);
 // window.prompt();
 // window.open("https://masynctech.com");
 
-console.log(document);
+console.log(document.body);
