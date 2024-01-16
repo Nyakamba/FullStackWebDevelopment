@@ -353,4 +353,20 @@ const patients = [
 //Patient with cold
 
 const patientWithCold = patients.find((patient) => patient.disease === "Cold");
-console.log(patientWithCold);
+// console.log(patientWithCold);
+
+// *-------
+// * Search and filter using 'some()'
+// *-------
+
+const patients2 = [
+  { id: 101, name: "Sarah", disease: "Cold" },
+  { id: 102, name: "Mike", disease: "Fever" },
+  { id: 103, name: "Lucy", disease: "Cold" },
+];
+
+//Patient with cold
+
+const patientWithCold2 = patients.some((patient) => patient.disease === "Cold");
+
+console.log(patientWithCold2);
