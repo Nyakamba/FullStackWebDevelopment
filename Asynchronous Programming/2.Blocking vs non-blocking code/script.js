@@ -2,10 +2,10 @@
 
 // console.log("Starting Blocking Operations");
 
-// //-----Create blocking code
-// //for (let i = 0; i < 1e9; i++) {
-// //do somthing
-// //console.log(i);
+//-----Create blocking code
+//for (let i = 0; i < 1e9; i++) {
+//do somthing
+//console.log(i);
 
 // console.log("Finished Blocking Operations");
 
