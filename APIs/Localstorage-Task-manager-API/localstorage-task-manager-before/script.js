@@ -2,53 +2,48 @@ const inputEl = document.querySelector("#input");
 const buttonEl = document.querySelector("#delete");
 const outputEl = document.querySelector("#list-container");
 const form = document.querySelector("form");
-
 //Delete task
 
-const removeTask = id => {
+const removeTask = (id) => {
   let tasks;
   if (localStorage.getItem("tasks") === null) {
     tasks = [];
   } else {
     tasks = JSON.parse(localStorage.getItem("tasks", tasks));
   }
-  tasks = tasks.filter(task => {
+  tasks = tasks.filter((task) => {
     return task.id !== +id;
   });
   localStorage.setItem("tasks", JSON.stringify(tasks));
-  getTasks();
+  getTask();
 };
-
-//get tasks
-const getTasks = () => {
+//Get tasks
+const getTask = () => {
   let tasks;
   if (localStorage.getItem("tasks") === null) {
     tasks = [];
   } else {
     tasks = JSON.parse(localStorage.getItem("tasks"));
   }
-  console.log(tasks);
-  //Display to DOM
+  //Display to dom
   let output;
-  const allTasks = tasks.map(task => {
+  const allTasks = tasks.map((task) => {
     return `
     <li id="item">
-            <span>${task.title}</span>
-            <button onclick="removeTask('${task.id}')" id="delete">X</button>
-          </li>
-    `;
+      <span>${task.title}</span>
+      <button onclick="removeTask('${task.id}')" id="delete">X</button>
+    </li>`;
   });
   output = allTasks.join("");
   outputEl.innerHTML = output;
 };
-getTasks();
-
-//Add Task and save into loclal storage
-const addTask = e => {
+getTask();
+//Add task and seve into local storage
+const addTask = (e) => {
   e.preventDefault();
   //check if input is empty
   if (inputEl.value === "") {
-    alert("Pleast enter a task");
+    alert("Please enyet a task");
   }
 
   //get the item
@@ -66,16 +61,15 @@ const addTask = e => {
       id: Date.now(),
       title: task,
     });
-    //Save to storage
+    //save to storage
     localStorage.setItem("tasks", JSON.stringify(tasks));
     //empty input
     inputEl.value = "";
   }
-  getTasks();
+  getTask();
 };
-//Get items
 
-//remove
+//Remove
 
 //Event Listener
 
