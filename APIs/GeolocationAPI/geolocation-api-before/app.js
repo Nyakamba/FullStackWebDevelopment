@@ -3,7 +3,7 @@ const country_container = document.getElementById("country-container");
 const map = document.getElementById("map");
 //https://api.positionstack.com/v1/forward
 // ? access_key = YOUR_ACCESS_KEY
-// & query = 1600 Pennsylvania Ave NW, Washington DC
+// & query = 1600 Pennsylvania Ave NW, Washington D
 //Geolocation API
 
 //d72c6b9912f63eb9912d54fefcf89c7d
