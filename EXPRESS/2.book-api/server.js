@@ -17,6 +17,7 @@ app.get("/", (req, res) => {
   res.json({
     status: "success",
     message: "Welcome to my first book api using express",
+    data: "Enock",
   });
 });
 //Fetching all books
