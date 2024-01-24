@@ -7,19 +7,21 @@ const postRouter = express.Router();
 
 postRouter.post("/", async (req, res) => {
   try {
-    //1.find the auther
-    const author = await User.findById(req.body.author);
-    //2.create a new post
     const savedPost = await Post.create({
       title: req.body.title,
       content: req.body.content,
       author: req.body.author,
     });
-    //3.Push the post into the users post
-    author.posts.push(savedPost);
-    //4.Resave the author
-    await author.save();
-    //5.send the response
+
+    //1.find the user
+    const userFound = await User.findById(req.body.author);
+    if (!userFound) {
+      return req.json({ msg: "User not found" });
+    }
+    //2.save created post into user posts field
+    userFound.posts.push(savedPost);
+    //3.resave
+    await userFound.save();
     res.json(savedPost);
   } catch (err) {
     res.json({ message: err });
@@ -29,7 +31,10 @@ postRouter.post("/", async (req, res) => {
 // GET /posts
 postRouter.get("/", async (req, res) => {
   try {
-    const posts = await Post.find().populate("author");
+    const posts = await Post.find().populate({
+      path: "author",
+      populate: { path: "posts", model: "Post" },
+    });
     res.json(posts);
   } catch (err) {
     res.json({ message: err });
