@@ -51,6 +51,20 @@ const Student = mongoose.model("Student", studentSchema);
 //   .then((student) => console.log(student))
 //   .then((err) => console.log(err));
 
-Student.findOne({ name: "Esther" })
+// Student.findOne({ name: "Esther" })
+//   .then((student) => console.log(student))
+//   .then((err) => console.log(err));
+
+//update a record
+
+// Student.findOneAndUpdate({ name: "Emma" }, { age: 35 }, { new: true })
+//   .then((student) => console.log(student))
+//   .then((err) => console.log(err));
+
+Student.findByIdAndUpdate(
+  "65b0db5adb55186f6e81dce0",
+  { age: 353 },
+  { new: true }
+)
   .then((student) => console.log(student))
   .then((err) => console.log(err));
