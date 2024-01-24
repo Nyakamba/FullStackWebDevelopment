@@ -11,13 +11,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // posts: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Post",
-    //   },
-    // ],
-    posts: Array,
+    posts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
   },
   {
     toJSON: {
@@ -27,9 +26,9 @@ const userSchema = new mongoose.Schema(
 );
 
 //find the total post created by this user
-// userSchema.virtual("postCount").get(function () {
-//   return this.posts.length;
-// });
+userSchema.virtual("postCount").get(function () {
+  return this.posts.length;
+});
 
 const User = mongoose.model("User", userSchema);
 
