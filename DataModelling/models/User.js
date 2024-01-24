@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema(
     //     ref: "Post",
     //   },
     // ],
+    posts: Array,
   },
   {
     toJSON: {
