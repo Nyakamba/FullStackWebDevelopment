@@ -5,15 +5,20 @@ const mongoose = require("mongoose");
 //connect to mongoose
 mongoose
   .connect(
-    "mongodb+srv://inovotek:Y8MtpWcYhID3JlwS@mongodb-demo.lqjq2rn.mongodb.net/school?retryWrites=true&w=majority"
+    "mongodb+srv://omwegaenock:XqpFEe3sJXtadKMe@cluster0.ogu2spg.mongodb.net/low-level-auth?retryWrites=true&w=majority"
   )
   .then(() => console.log("Db connected"))
-  .catch(err => console.log(err.message));
+  .catch((err) => console.log(err.message));
 
 const userSchema = new mongoose.Schema({
   username: String,
   fullName: String,
-  password: Array,
+  password: String,
+  image: {
+    type: String,
+    default:
+      "https://cdn.pixabay.com/photo/2015/08/05/04/25/people-875617_960_720.jpg",
+  },
 });
 //model
 
