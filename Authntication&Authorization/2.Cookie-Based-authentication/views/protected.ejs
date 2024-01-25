@@ -8,9 +8,8 @@
     <title>Document</title>
   </head>
   <body>
-    <%-include('partials/nav.ejs')%>
+    <%-include('partials/nav.ejs')%> <%if(user){%>
     <h1>Welcome to your Protected Page</h1>
-
     <div class="cardContainer">
       <div class="card">
         <div class="cardHeader">
@@ -18,5 +17,8 @@
         </div>
       </div>
     </div>
+    <%}else{%>
+    <h1>You are not looged in</h1>
+    <%}%>
   </body>
 </html>
