@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcryptjs");
 const app = express();
 const port = 3000;
 const mongoose = require("mongoose");
@@ -52,18 +53,17 @@ app.get("/protected", (req, res) => {
 
 //login logic
 app.post("/login", async (req, res) => {
-  // get username and password
-  let username = req.body.username;
-  let userPassword = req.body.password;
-  //find user inside mongodb
+  const { username, password } = req.body;
+  //1.check if username exists
   const userFound = await User.findOne({ username });
-  const password = await User.findOne({ password: userPassword });
-  if (!userFound || !password) {
-    return res.json({ msg: "Invalid  login credentials" });
+  if (!userFound) {
+    return res.json({ msg: "Invalid login credentials" });
   }
-  console.log("login success");
-  //API
-  //res.json({ msg: "Login successful", userFound });
+  //2.check if passowrd is valid
+  const isPassowrdValid = await bcrypt.compare(password, userFound.password);
+  if (!isPassowrdValid) {
+    return res.json({ msg: "Invalid login credentials" });
+  }
   res.redirect(`/profile/${userFound._id}`);
 });
 
@@ -73,17 +73,18 @@ app.get("/register", (req, res) => {
 });
 
 //Register user
-app.post("/register", (req, res) => {
+app.post("/register", async (req, res) => {
+  const { fullName, username, password } = req.body;
+  //1.create a salt
+  const salt = await bcrypt.genSalt(10);
+  //2.hash user password
+  const hashedPassword = await bcrypt.hash(password, salt);
   //register user
-  User.create({
-    fullName: req.body.fullName,
-    username: req.body.username,
-    password: req.body.password,
-  })
-    .then((user) => {
-      res.redirect("/login");
-    })
-    .catch((err) => console.log(err));
+  await User.create({
+    fullName,
+    username,
+    password: hashedPassword,
+  });
 });
 
 //profile
