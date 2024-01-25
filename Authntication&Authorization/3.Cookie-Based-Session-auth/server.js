@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const cookieparser = require("cookie-parser");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const app = express();
 const port = 3000;
 const mongoose = require("mongoose");
@@ -35,7 +35,12 @@ app.use(
     secret: "fewjih721wsady03474bviner",
     resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 600000 },
+    store: new MongoStore({
+      mongoUrl:
+        "mongodb+srv://omwegaenock:XqpFEe3sJXtadKMe@cluster0.ogu2spg.mongodb.net/low-level-auth?retryWrites=true&w=majority",
+      ttl: 24 * 60 * 60 * 1000,
+    }),
   })
 );
 
@@ -48,13 +53,10 @@ app.use(express.json());
 //pass form data
 app.use(express.urlencoded({ extended: true }));
 
-//pass cookies
-app.use(cookieparser());
-
 //-----
 //Cookies
 //------
-//send cookise to the client
+//send cookies to the client
 app.get("/send-cookies", (req, res) => {
   //send cookie
   res.cookie("name", "John", {
