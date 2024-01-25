@@ -40,14 +40,41 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-//login
+//get login
 app.get("/login", (req, res) => {
   res.render("login");
 });
 
-//Register
+//login logic
+app.post("/login", async (req, res) => {
+  // get username and password
+  let username = req.body.username;
+  let userPassword = req.body.password;
+  //find user inside mongodb
+  const userFound = await User.findOne({ username });
+  const password = await User.findOne({ password: userPassword });
+  if (!userFound || !password) {
+    return res.json({ msg: "Invalid  login credentials" });
+  }
+
+  res.json({ msg: "Login successful", userFound });
+});
+
+//get Register
 app.get("/register", (req, res) => {
   res.render("register");
+});
+
+//Register user
+app.post("/register", (req, res) => {
+  //register user
+  User.create({
+    fullName: req.body.fullName,
+    username: req.body.username,
+    password: req.body.password,
+  })
+    .then((user) => console.log(user))
+    .catch((err) => console.log(err));
 });
 
 //profile
