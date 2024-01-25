@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const cookieparser = require("cookie-parser");
+const session = require("express-session");
 const app = express();
 const port = 3000;
 const mongoose = require("mongoose");
@@ -28,6 +29,16 @@ const User = mongoose.model("User", userSchema);
 //view engine setup ejs
 app.set("view engine", "ejs");
 
+//configure session
+app.use(
+  session({
+    secret: "fewjih721wsady03474bviner",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 },
+  })
+);
+
 //static files
 app.use(express.static("public"));
 
@@ -53,9 +64,26 @@ app.get("/send-cookies", (req, res) => {
   });
   res.send("Cookie sent");
 });
+
+//auth middleware
+const protected = (req, res, next) => {
+  if (!req.session.loginUser) {
+    return res.render("notAllowed");
+  }
+  next();
+};
 //routes
 app.get("/", (req, res) => {
+  //add login user
+
+  console.log(req.session);
   res.render("index");
+});
+
+//loout
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/login");
 });
 
 //get login form
@@ -63,8 +91,8 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 
-//get protected
-app.get("/protected", (req, res) => {
+// Protected
+app.get("/protected", protected, (req, res) => {
   //get cookies
   const user = req.cookies.username;
   res.render("protected", { user });
@@ -83,19 +111,18 @@ app.post("/login", async (req, res) => {
   if (!isPassowrdValid) {
     return res.json({ msg: "Invalid login credentials" });
   }
-  //store username and password inside the cookie
-  res.cookie("username", userFound.username);
-  res.cookie("fullname", userFound.fullName);
+  //save the login user into session
+  req.session.loginUser = userFound;
   res.redirect(`/profile/${userFound._id}`);
 });
 
 //logout
-app.get("/logout", (req, res) => {
-  //delete cookies
-  res.clearCookie("fullname");
-  res.clearCookie("username");
-  res.redirect("/login");
-});
+// app.get("/logout", (req, res) => {
+//   //delete cookies
+//   res.clearCookie("fullname");
+//   res.clearCookie("username");
+//   res.redirect("/login");
+// });
 
 //get Register
 app.get("/register", (req, res) => {
@@ -119,7 +146,7 @@ app.post("/register", async (req, res) => {
 });
 
 //profile
-app.get("/profile/:id", async (req, res) => {
+app.get("/profile/:id", protected, async (req, res) => {
   //find user by ID
   const user = await User.findById(req.params.id);
   res.render("profile", { user });
