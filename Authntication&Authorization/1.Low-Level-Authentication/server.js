@@ -56,8 +56,10 @@ app.post("/login", async (req, res) => {
   if (!userFound || !password) {
     return res.json({ msg: "Invalid  login credentials" });
   }
-
-  res.json({ msg: "Login successful", userFound });
+  console.log("login success");
+  //API
+  //res.json({ msg: "Login successful", userFound });
+  res.redirect(`/profile/${userFound._id}`);
 });
 
 //get Register
@@ -73,13 +75,17 @@ app.post("/register", (req, res) => {
     username: req.body.username,
     password: req.body.password,
   })
-    .then((user) => console.log(user))
+    .then((user) => {
+      res.redirect("/login");
+    })
     .catch((err) => console.log(err));
 });
 
 //profile
-app.get("/profile", (req, res) => {
-  res.render("profile");
+app.get("/profile/:id", async (req, res) => {
+  //find user by ID
+  const user = await User.findById(req.params.id);
+  res.render("profile", { user });
 });
 //listen
 app.listen(port, () => {
