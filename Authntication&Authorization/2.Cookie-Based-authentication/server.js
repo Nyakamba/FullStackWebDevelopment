@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const cookieparser = require("cookie-parser");
 const app = express();
 const port = 3000;
 const mongoose = require("mongoose");
@@ -36,6 +37,22 @@ app.use(express.json());
 //pass form data
 app.use(express.urlencoded({ extended: true }));
 
+//pass cookies
+app.use(cookieparser());
+
+//-----
+//Cookies
+//------
+//send cookise to the client
+app.get("/send-cookies", (req, res) => {
+  //send cookie
+  res.cookie("name", "John", {
+    httpOnly: true,
+    secure: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7, //7 days
+  });
+  res.send("Cookie sent");
+});
 //routes
 app.get("/", (req, res) => {
   res.render("index");
@@ -48,7 +65,9 @@ app.get("/login", (req, res) => {
 
 //get protected
 app.get("/protected", (req, res) => {
-  res.render("protected");
+  //get cookies
+  const user = req.cookies.username;
+  res.render("protected", { user });
 });
 
 //login logic
@@ -64,7 +83,18 @@ app.post("/login", async (req, res) => {
   if (!isPassowrdValid) {
     return res.json({ msg: "Invalid login credentials" });
   }
+  //store username and password inside the cookie
+  res.cookie("username", userFound.username);
+  res.cookie("fullname", userFound.fullName);
   res.redirect(`/profile/${userFound._id}`);
+});
+
+//logout
+app.get("/logout", (req, res) => {
+  //delete cookies
+  res.clearCookie("fullname");
+  res.clearCookie("username");
+  res.redirect("/login");
 });
 
 //get Register
@@ -75,16 +105,17 @@ app.get("/register", (req, res) => {
 //Register user
 app.post("/register", async (req, res) => {
   const { fullName, username, password } = req.body;
-  //1.create a salt
   const salt = await bcrypt.genSalt(10);
-  //2.hash user password
   const hashedPassword = await bcrypt.hash(password, salt);
-  //register user
-  await User.create({
+  const user = await User.create({
     fullName,
     username,
     password: hashedPassword,
   });
+  //store username and password inside the cookie
+  res.cookie("username", user.username);
+  res.cookie("fullname", user.fullName);
+  res.redirect("/login");
 });
 
 //profile
