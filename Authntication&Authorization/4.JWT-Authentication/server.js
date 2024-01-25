@@ -1,7 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const jwt = require("jsonwebtoken");
 const app = express();
 const port = 3000;
 const mongoose = require("mongoose");
@@ -29,21 +28,6 @@ const User = mongoose.model("User", userSchema);
 //view engine setup ejs
 app.set("view engine", "ejs");
 
-//configure session
-app.use(
-  session({
-    secret: "fewjih721wsady03474bviner",
-    resave: true,
-    saveUninitialized: true,
-    cookie: { maxAge: 600000 },
-    store: new MongoStore({
-      mongoUrl:
-        "mongodb+srv://omwegaenock:XqpFEe3sJXtadKMe@cluster0.ogu2spg.mongodb.net/low-level-auth?retryWrites=true&w=majority",
-      ttl: 24 * 60 * 60 * 1000,
-    }),
-  })
-);
-
 //static files
 app.use(express.static("public"));
 
@@ -54,37 +38,28 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //-----
-//Cookies
+//JWT
 //------
-//send cookies to the client
-app.get("/send-cookies", (req, res) => {
-  //send cookie
-  res.cookie("name", "John", {
-    httpOnly: true,
-    secure: true,
-    maxAge: 1000 * 60 * 60 * 24 * 7, //7 days
-  });
-  res.send("Cookie sent");
+
+//1.Generate token
+const generateToken = (user) => {
+  return jwt.sign({ user }, "anykey", { expiresIn: "1h" });
+};
+
+const token = generateToken({
+  username: "Enock",
+  email: "omwegaenock@gmail.com",
 });
 
-//auth middleware
-const protected = (req, res, next) => {
-  if (!req.session.loginUser) {
-    return res.render("notAllowed");
-  }
-  next();
-};
+console.log(token);
+
 //routes
 app.get("/", (req, res) => {
-  //add login user
-
-  console.log(req.session);
   res.render("index");
 });
 
 //loout
 app.get("/logout", (req, res) => {
-  req.session.destroy();
   res.redirect("/login");
 });
 
@@ -94,10 +69,8 @@ app.get("/login", (req, res) => {
 });
 
 // Protected
-app.get("/protected", protected, (req, res) => {
-  //get cookies
-  const user = req.cookies.username;
-  res.render("protected", { user });
+app.get("/protected", (req, res) => {
+  res.render("protected");
 });
 
 //login logic
@@ -113,18 +86,14 @@ app.post("/login", async (req, res) => {
   if (!isPassowrdValid) {
     return res.json({ msg: "Invalid login credentials" });
   }
-  //save the login user into session
-  req.session.loginUser = userFound;
-  res.redirect(`/profile/${userFound._id}`);
-});
 
-//logout
-// app.get("/logout", (req, res) => {
-//   //delete cookies
-//   res.clearCookie("fullname");
-//   res.clearCookie("username");
-//   res.redirect("/login");
-// });
+  res.json({
+    username: userFound.username,
+    fullName: userFound.fullName,
+    token: generateToken(userFound),
+  });
+  //res.redirect(`/profile/${userFound._id}`);
+});
 
 //get Register
 app.get("/register", (req, res) => {
@@ -141,14 +110,12 @@ app.post("/register", async (req, res) => {
     username,
     password: hashedPassword,
   });
-  //store username and password inside the cookie
-  res.cookie("username", user.username);
-  res.cookie("fullname", user.fullName);
+
   res.redirect("/login");
 });
 
 //profile
-app.get("/profile/:id", protected, async (req, res) => {
+app.get("/profile/:id", async (req, res) => {
   //find user by ID
   const user = await User.findById(req.params.id);
   res.render("profile", { user });
