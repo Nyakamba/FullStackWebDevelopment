@@ -40,9 +40,14 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-//get login
+//get login form
 app.get("/login", (req, res) => {
   res.render("login");
+});
+
+//get protected
+app.get("/protected", (req, res) => {
+  res.render("protected");
 });
 
 //login logic
