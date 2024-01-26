@@ -4,6 +4,10 @@ const jwt = require("jsonwebtoken");
 const app = express();
 const port = 3000;
 const mongoose = require("mongoose");
+const getTokenFromHeaders = require("./utils/getTokenFromHeaders");
+const verifyToken = require("./utils/verifyToken");
+const isLogin = require("./middlewares/isLogin");
+
 //connect to mongoose
 mongoose
   .connect(
@@ -44,20 +48,6 @@ app.use(express.urlencoded({ extended: true }));
 //1.Generate token
 const generateToken = (id) => {
   return jwt.sign({ id }, "anykey", { expiresIn: "1h" });
-};
-
-//2.verify token
-const verifyToken = (token) => {
-  return jwt.verify(token, "anykey", (err, decoded) => {
-    if (err) {
-      return {
-        status: "failed",
-        msg: "Invalid token or token expired",
-      };
-    }
-    //return the decoded
-    return decoded;
-  });
 };
 
 //routes
@@ -124,8 +114,7 @@ app.post("/register", async (req, res) => {
 //profile
 app.get("/profile/", async (req, res) => {
   //1.get token from headers
-  const headerObj = req.headers;
-  const token = headerObj["authorization"].split(" ")[1];
+  const token = getTokenFromHeaders(req);
   //2.verify token
   const decodedUser = verifyToken(token);
 
