@@ -34,6 +34,7 @@ app.set("view engine", "ejs");
 
 //static files
 app.use(express.static("public"));
+app.use(express.static(__dirname, +"/public"));
 
 //pass json data
 app.use(express.json());
@@ -85,6 +86,7 @@ app.post("/login", async (req, res) => {
   }
 
   res.json({
+    status: "Success",
     username: userFound.username,
     fullName: userFound.fullName,
     token: generateToken(userFound._id),
@@ -112,7 +114,7 @@ app.post("/register", async (req, res) => {
 });
 
 //profile
-app.get("/profile/", async (req, res) => {
+app.get("/profile/", isLogin, async (req, res) => {
   //1.get token from headers
   const token = getTokenFromHeaders(req);
   //2.verify token
