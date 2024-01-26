@@ -42,16 +42,23 @@ app.use(express.urlencoded({ extended: true }));
 //------
 
 //1.Generate token
-const generateToken = (user) => {
-  return jwt.sign({ user }, "anykey", { expiresIn: "1h" });
+const generateToken = (id) => {
+  return jwt.sign({ id }, "anykey", { expiresIn: "1h" });
 };
 
-const token = generateToken({
-  username: "Enock",
-  email: "omwegaenock@gmail.com",
-});
-
-console.log(token);
+//2.verify token
+const verifyToken = (token) => {
+  return jwt.verify(token, "anykey", (err, decoded) => {
+    if (err) {
+      return {
+        status: "failed",
+        msg: "Invalid token or token expired",
+      };
+    }
+    //return the decoded
+    return decoded;
+  });
+};
 
 //routes
 app.get("/", (req, res) => {
@@ -90,7 +97,7 @@ app.post("/login", async (req, res) => {
   res.json({
     username: userFound.username,
     fullName: userFound.fullName,
-    token: generateToken(userFound),
+    token: generateToken(userFound._id),
   });
   //res.redirect(`/profile/${userFound._id}`);
 });
@@ -115,10 +122,21 @@ app.post("/register", async (req, res) => {
 });
 
 //profile
-app.get("/profile/:id", async (req, res) => {
-  //find user by ID
-  const user = await User.findById(req.params.id);
-  res.render("profile", { user });
+app.get("/profile/", async (req, res) => {
+  //1.get token from headers
+  const headerObj = req.headers;
+  const token = headerObj["authorization"].split(" ")[1];
+  //2.verify token
+  const decodedUser = verifyToken(token);
+
+  //3.make request to fetch the decoded user
+  const userDetails = await User.findById(decodedUser.id);
+
+  res.json({
+    mgs: "Welcome to your profile",
+    status: "Success",
+    user: userDetails,
+  });
 });
 //listen
 app.listen(port, () => {
